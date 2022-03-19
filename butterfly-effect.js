@@ -50,13 +50,16 @@ async function spread(ns) {
 		await ns.print(target)
 		if (ns.hasRootAccess(target) && !ns.fileExists(file, target)) {
 			await ns.scp(file, me, target)
+			await ns.sleep(1000)
+		}
+		else if (ns.hasRootAccess(target) && ns.fileExists(file, target)) {
 			for (var i = 0; i < 10; ++i) {
 				ns.exec(file, target, 1, i)
 				await ns.sleep(1000)
 			}
-			await ns.sleep(3000)
+			await ns.sleep(2000)
 		}
-		await ns.sleep(4000)
+		await ns.sleep(3000)
 	}
 	await ns.sleep(10000)
 	await attack(ns)
@@ -76,22 +79,26 @@ async function attack(ns,) {
 		else if (ns.getServerNumPortsRequired = 0) {
 			await ns.nuke(target)
 		}
+		if (ns.hasRootAccess(target)) {
+			if (ns.getServerSecurityLevel(target) > ns.getServerMinSecurityLevel(target)) {
+				await ns.weaken(target)
+			}
 
-		// crack security block
-		if (ns.getServerSecurityLevel(target) > ns.getServerMinSecurityLevel(target)) {
-			await ns.weaken(target)
+			if (ns.getServerMoneyAvailable(target) < ns.getServerMaxMoney(target) * 0.20) {
+				await ns.grow(target)
+			}
+
+			if (ns.getServerSecurityLevel(target) <= ns.getServerMinSecurityLevel(target) &&
+				ns.getServerMoneyAvailable(target) >= ns.getServerMaxMoney(target) * 0.20 &&
+				ns.hasRootAccess(target) == true) {
+				await ns.hack(target)
+			}
 		}
-
-		if (ns.getServerMoneyAvailable(target) < ns.getServerMaxMoney(target) * 0.20) {
-			await ns.grow(target)
+		else {
+			var filtered = servers.filter(function(string) {
+				servers.remove(target)
+			})
 		}
-
-		if (ns.getServerSecurityLevel(target) <= ns.getServerMinSecurityLevel(target) &&
-			ns.getServerMoneyAvailable(target) >= ns.getServerMaxMoney(target) * 0.20 &&
-			ns.hasRootAccess(target) == true) {
-			await ns.hack(target)
-		}
-
 	}
 	await ns.sleep(20000)
 	await spread(ns)
