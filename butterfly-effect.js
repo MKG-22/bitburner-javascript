@@ -26,14 +26,27 @@ var servers = [
 	"harakiri-sushi",
 	"iron-gym",
 	"zer0",
-	"darkweb"
+	"darkweb",
+	"harakiri-sushi",
+	"iron-gym",
+	"shodan1",
+	"node-1",
+	"node-2",
+	"CamTech-1",
+	"CamTech-2",
+	"Marvel-Movies.Net",
+	"UbuntuCipher.xyZ",
+	"SWAG-1"
 ]
+
+var serversFiltered = []
 
 var target = ""
 var file = "scvhost.js"
 var me = ""
 
 export async function main(ns) {
+	ns.print("make sure to kill scripts on all targets before running.")
 	await ns.clearLog()
 	me = ns.getHostname()
 	await ns.toast(me + ": infected")
@@ -48,13 +61,21 @@ async function spread(ns) {
 	for (var k = 0; k < servers.length; ++k) {
 		target = servers[k]
 		await ns.print(target)
-		if (ns.hasRootAccess(target) && !ns.fileExists(file, target)) {
+		if (ns.hasRootAccess(target)) {
 			await ns.scp(file, me, target)
 			await ns.sleep(1000)
-		}
-		else if (ns.hasRootAccess(target) && ns.fileExists(file, target)) {
-			for (var i = 0; i < 10; ++i) {
-				ns.exec(file, target, 1, i)
+			ns.print("------------------------------")
+			var avRAM = (ns.getServerMaxRam(target) - ns.getServerUsedRam(target))
+			var scRam = ns.getScriptRam("scvhost.js", target)
+				// if(ns.getServerMaxRam(target) / ns.getServerUsedRam(target) > 5.00){
+			for (var i = 0; i < 20; ++i) {
+				if(avRAM >= scRam){
+				await ns.exec(file, target, 1, i)
+				await ns.sleep(1000)
+				}
+				else{
+					i=20
+				}
 				await ns.sleep(1000)
 			}
 			await ns.sleep(2000)
@@ -80,26 +101,19 @@ async function attack(ns,) {
 			await ns.nuke(target)
 		}
 		if (ns.hasRootAccess(target)) {
+			serversFiltered.push(target)
 			if (ns.getServerSecurityLevel(target) > ns.getServerMinSecurityLevel(target)) {
 				await ns.weaken(target)
 			}
-
-			if (ns.getServerMoneyAvailable(target) < ns.getServerMaxMoney(target) * 0.20) {
+			else if (ns.getServerMoneyAvailable(target) < ns.getServerMaxMoney(target) * 0.20) {
 				await ns.grow(target)
 			}
-
-			if (ns.getServerSecurityLevel(target) <= ns.getServerMinSecurityLevel(target) &&
-				ns.getServerMoneyAvailable(target) >= ns.getServerMaxMoney(target) * 0.20 &&
-				ns.hasRootAccess(target) == true) {
+			else if (ns.getServerRequiredHackingLevel(target) <= ns.getHackingLevel()) {
 				await ns.hack(target)
 			}
 		}
-		else {
-			var filtered = servers.filter(function(string) {
-				servers.remove(target)
-			})
-		}
 	}
+	servers = serversFiltered
 	await ns.sleep(20000)
 	await spread(ns)
 }
