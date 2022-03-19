@@ -36,7 +36,10 @@ var servers = [
 	"CamTech-2",
 	"Marvel-Movies.Net",
 	"UbuntuCipher.xyZ",
-	"SWAG-1"
+	"SWAG-1",
+	"Delta-7",
+	"Delta-9",
+	"Delta-X"
 ]
 
 var serversFiltered = []
@@ -65,16 +68,17 @@ async function spread(ns) {
 			await ns.scp(file, me, target)
 			await ns.sleep(1000)
 			ns.print("------------------------------")
-			var avRAM = (ns.getServerMaxRam(target) - ns.getServerUsedRam(target))
+			var avRam = (ns.getServerMaxRam(target) - ns.getServerUsedRam(target))
 			var scRam = ns.getScriptRam("scvhost.js", target)
-				// if(ns.getServerMaxRam(target) / ns.getServerUsedRam(target) > 5.00){
+			// if(ns.getServerMaxRam(target) / ns.getServerUsedRam(target) > 5.00){
+			var threads = Math.floor(avRam / scRam)
 			for (var i = 0; i < 20; ++i) {
-				if(avRAM >= scRam){
-				await ns.exec(file, target, 1, i)
-				await ns.sleep(1000)
+				if (avRam >= scRam) {
+					await ns.exec(file, target, threads, i)
+					await ns.sleep(1000)
 				}
-				else{
-					i=20
+				else {
+					i = 20
 				}
 				await ns.sleep(1000)
 			}
