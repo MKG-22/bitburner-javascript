@@ -95,6 +95,7 @@ var hackLv = 0
 // Variables
 
 export async function main(ns) {
+	await ns.tail(file, "home")
 	ns.clearLog
 	await log(ns, file + ": Butterfly-Effect " + Date())
 	await log(ns, "------------------------------------------------")
