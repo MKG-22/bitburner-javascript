@@ -223,26 +223,27 @@ async function gainRoot(ns, target) {
 
 async function attack(ns) {
 	await ns.sleep(5000)
-	for (var i = 0; i < rootList.length; ++i) {
+	// for (var i = 0; i < rootList.length; ++i) {
+		for (var x of rootList){
 		var wm = Math.floor(Math.random() * weakMessages.length)
 		var gm = Math.floor(Math.random() * growMessages.length)
 		var hm = Math.floor(Math.random() * hackMessages.length)
-		var tar = rootList[i]	
-		
+		// var tar = rootList
+		await log(ns, x)
 		if (servSec > 0) { //servMinSec) {
-			await log(ns, file + ": " + me + ": " + tar + ": Security: Too High.")
-			await ns.weaken(tar)
+			await log(ns, file + ": " + me + ": " + x + ": Security: Too High.")
+			await ns.weaken(x)
 			notify(ns, wm)
 			
 		}
 		if (servAvMoney < servMaxMoney * 0.05) {//* 0.75) {
-			await log(ns, file + ": " + me + ": " + tar + ": Money Too Low.")
-			await ns.grow(tar)
+			await log(ns, file + ": " + me + ": " + x + ": Money Too Low.")
+			await ns.grow(x)
 			notify(ns, gm)
 		}
 		if (servSec <= 0 && servAvMoeny >= servMaxMoney && hackLv >= servReqHackLv) {
-			await log(ns, file + ": " + me + ": " + tar + ": Hacking.")
-			await ns.hack(tar)
+			await log(ns, file + ": " + me + ": " + x + ": Hacking.")
+			await ns.hack(x)
 			notify(ns, hm)
 		}
 	}
@@ -260,5 +261,5 @@ async function log(ns, msg) {
 }
 
 async function notify(ns, msg){
-	if(isFunny==true) { ns.toast(msg)}
+	if(isFunny==true) { await ns.toast(msg)}
 }
