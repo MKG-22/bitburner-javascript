@@ -42,6 +42,7 @@
 // 	"Delta-X"
 // ]
 
+// Variables
 var servers = [
 	"n00dles",
 	"foodnstuff",
@@ -49,7 +50,7 @@ var servers = [
 	"joesguns",
 	"hong-fang-tea",
 	"harakiri-sushi",
-	"iron-gym"       
+	"iron-gym"
 ]
 
 var weakMessages = [
@@ -66,37 +67,52 @@ var growMessages = [
 	""
 ]
 
-var serversFiltered = []
+var rootList = []
+var blockList = []
 
 var target = ""
-
 var file = "scvhost.js"
-
 var me = ""
 
 var avRam = null
-var scRam = null 
-var maxRam = null 
-var usedRam = null 
-var threads = null 
+var scRam = null
+var maxRam = null
+var usedRam = null
+var threads = null
+
+var servSec = 0
+var servMinSec = 0
+
+var maxRam = 0
+var usedRam = 0
+var numPorts = 0
+
+var servAvMoney = 0
+var servMaxMoney = 0
+
+var servReqHackLv = 0
+var hackLv = 0
+// Variables
 
 export async function main(ns) {
-	await ns.clearLog()
-	log(ns, "svchost.js: Butterfly-Effect " + Date())
-	log(ns, "------------------------------------------------")
+	ns.clearLog
+	await log(ns, file + ": Butterfly-Effect " + Date())
+	await log(ns, "------------------------------------------------")
 	me = ns.getHostname()
-	log(ns,"host: " +  me + " infected")
+	await log(ns, "host: " + me + " infected")
 	await ns.toast(me + ": infected")
+	await log(ns, "\n")
 	await install(ns)
 }
 
 async function install(ns) {
-	log(ns, "svchost.js: " + me + ": Running Installation.")
+	await log(ns, file + ": " + me + ": Running Installation.")
+	await log(ns, "\n")
 	await spread(ns)
 }
 
 async function spread(ns) {
-	log(ns, "svchost.js: " + me + ": Running Spread.")
+	await await log(ns, file + ": " + me + ": Running Spread.")
 	for (var k = 0; k < servers.length; ++k) {
 		// variables
 		target = servers[k]
@@ -115,105 +131,104 @@ async function spread(ns) {
 		hackLv = ns.getHackingLevel()
 
 		avRam = (maxRam - usedRam)
-		
-		log(ns, "svchost.js: " + me + ": target: " + target)
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Max Ram: " + maxRam)
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Ram Used: " + usedRam)
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Available Ram: " + avRam)
+
+		await await log(ns, file + ": " + me + ": " + target)
+		await await log(ns, file + ": " + me + ": " + target + ": Max Ram: " + maxRam)
+		await await log(ns, file + ": " + me + ": " + target + ": Ram Used: " + usedRam)
+		await await log(ns, file + ": " + me + ": " + target + ": Available Ram: " + avRam)
 		// variables
 
 		if (ns.hasRootAccess(target)) {
-			log(ns, "svchost.js: " + me + ": target: " + target + ": Root.Access: Accepted.")
+			await log(ns, file + ": " + me + ": " + target + ": Root.Access: Accepted.")
 			await ns.scp(file, me, target)
-			log(ns, "svchost.js: " + me + ": target: " + target + ": File Attempted Copy.")
-			if(ns.fileExists("svchost.js", target)){
-				log(ns, "svchost.js: " + me + ": target: " + target + ": File Found.")
-				scRam = ns.getScriptRam("scvhost.js", target)
-				log(ns, "svchost.js: " + me + ": target: " + target + ": Script Required : " + scRam)
-			}
-			else{
-				log(ns, "svchost.js: " + me + ": target: " + target + ": File Not Found.")
-				log(ns, "svchost.js: " + me + ": target: Aquiring New Target.")
-				return end
-			}
-			await ns.sleep(1000)
-			// if(ns.getServerMaxRam(target) / ns.getServerUsedRam(target) > 5.00){
-			threads = Math.floor(avRam / scRam)
-			log(ns, "svchost.js: " + me + ": target: " + target + ": Script-Possible-Threads: " + threads)
-			for (var i = 0; i < 20; ++i) {
-				if (avRam >= scRam) {
-					log(ns, "svchost.js: " + me + ": target: " + target + ": Possible(Ram)")
-					log(ns, "svchost.js: " + me + ": target: " + target + ": executing~" + file + " (threads: " + threads + ") [Butterfly-" + i + "]")
-					await ns.exec(file, target, threads, "Butterfly-"+i)
-					if(ns.isRunning(file, target)){
-						log(ns, "svchost.js: " + me + ": target: " + target + ": File Is Running.")
+			await log(ns, file + ": " + me + ": " + target + ": File Attempted Copy.")
+			await log(ns, file + ": " + me + ": " + target + ": Transfer: " + file + " | " + me + " | " + target)
+			if (ns.fileExists(file, target)) {
+				await log(ns, file + ": " + me + ": " + target + ": File Found.")
+				scRam = ns.getScriptRam(file, target)
+				await log(ns, file + ": " + me + ": " + target + ": Script-Ram Required : " + scRam)
+
+				threads = Math.floor(avRam / scRam)
+				await log(ns, file + ": " + me + ": " + target + ": Script-Possible-Threads: " + threads)
+				for (var i = 0; i < 20; ++i) {
+					if (avRam >= scRam) {
+						await log(ns, file + ": " + me + ": " + target + ": Possible(Ram)")
+						await log(ns, file + ": " + me + ": " + target + ": executing~" + file + " (threads: " + threads + ") [Butterfly-" + i + "]")
+						await ns.exec(file, target, threads, "Butterfly-" + i)
+						if (ns.isRunning(file, target)) {
+							await log(ns, file + ": " + me + ": " + target + ": File Is Running.")
+						}
 					}
-					await ns.sleep(1000)
+					else {
+						await log(ns, file + ": " + me + ": " + target + ": Not Enough Ram To Execute More.")
+						i = 20
+					}
 				}
-				else {
-					log(ns, "svchost.js: " + me + ": target: " + target + ": Not Enough Ram To Execute More.")
-					i = 20
-				}
-				await ns.sleep(1000)
 			}
-			await ns.sleep(2000)
+			else {
+				await log(ns, file + ": " + me + ": " + target + ": File Not Found.")
+				await log(ns, file + ": " + me + ": target: Aquiring New Target.")
+			}
 		}
-		await ns.sleep(3000)
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Root.Access: Denied[1].")
-		gainRoot(ns, target)
-		await ns.sleep(3000)
+		await log(ns, file + ": " + me + ": " + target + ": Root.Access: Denied[1].")
+		await gainRoot(ns, target)
 	}
-	await ns.sleep(10000)
-	await attack(ns, target)
+	await attack(ns)
 }
 
 
-async function gainRoot(ns, target){
+async function gainRoot(ns, target) {
+	await log(ns, file + ": " + me + ": " + target + ": Running gainRoot.")
 	if (numPorts > 0) {
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Cracking Ports: " + numPorts)
-		await ns.brutessh(target)
-		await ns.ftpcrack(target)
-		await ns.relaysmtp(target)
+		// await log(ns, file + ": " + me + ": " + target + ": Cracking Ports: " + numPorts)
+		// await ns.brutessh(target)
+		// await ns.ftpcrack(target)
+		// await ns.relaysmtp(target)
+		await log(ns, file + ": " + me + ": " + target + ": Require Stronger Cracks.")
 	}
-	else if (numPorts = 0) {
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Cracking Ports: " + numPorts)
+	else if (numPorts == 0) {
+		await log(ns, file + ": " + me + ": " + target + ": Cracking Ports: " + numPorts)
 		await ns.nuke(target)
 	}
 	if (ns.hasRootAccess(target)) {
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Root.Access: Accepted.")
-		serversFiltered.push(target)
+		await log(ns, file + ": " + me + ": " + target + ": Root.Access: Accepted.")
+		await log(ns, file + ": " + me + ": " + target + ": Adding to Root List.")
+		rootList.push(target)
+		await log(ns, rootList)
 	}
-	else{
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Root.Access: Denied[2].")
+	else {
+		await log(ns, file + ": " + me + ": " + target + ": Root.Access: Denied[2].")
+		await log(ns, file + ": " + me + ": " + target + ": Adding to Blocked List.")
+		blockList.push(target)
+		await log(ns, blockList)
 	}
 }
 
 async function attack(ns) {
-	for(var i=0;i<serversFiltered.length;++i){
-		var tar = serversFiltered[i]
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Root.Access: Denied[2].")
-		if (servSec > 0 ) { //servMinSec) {
-			log(ns, "svchost.js: " + me + ": target: " + target + ": Security: Too High.")
-		await ns.weaken(serversFiltered[i])
+	for (var i = 0; i < rootList.length; ++i) {
+		var tar = rootList[i]
+		if (servSec > 0) { //servMinSec) {
+			await log(ns, file + ": " + me + ": " + tar + ": Security: Too High.")
+			await ns.weaken(tar)
 		}
 		if (servAvMoney < servMaxMoney * 0.75) {//* 0.75) {
-			log(ns, "svchost.js: " + me + ": target: " + target + ": Money Too Low.")
-			await ns.grow(target)
+			await log(ns, file + ": " + me + ": " + tar + ": Money Too Low.")
+			await ns.grow(tar)
 		}
 		if (servSec <= 0 && servAvMoeny >= servMaxMoney && hackLv >= servReqHackLv) {
-			log(ns, "svchost.js: " + me + ": target: " + target + ": Hacking.")
-			await ns.hack(target)
+			await log(ns, file + ": " + me + ": " + tar + ": Hacking.")
+			await ns.hack(tar)
 		}
-		await ns.sleep(20000)
-		log(ns, "svchost.js: " + me + ": target: " + target + ": Re-Runnig Spread.")
-		await spread(ns)
 	}
+	await log(ns, file + ": " + me + ": Blocked List")
+	await log(ns, file + ": " + me + ": " + blockList)
+	await log(ns, file + ": " + me + ": Root List")
+	await log(ns, file + ": " + me + ": " + rootList)
+	await ns.sleep(1000)
+	await log(ns, file + ": " + me + ": " + target + ": Re-Runnig Spread.")
+	await attack(ns)
 }
 
-async function log(ns, msg){
-	ns.print(msg)
-}
-
-async function dl(ns, func){
-	ns.disableLog(func)
+async function log(ns, msg) {
+	await ns.print(msg)
 }
