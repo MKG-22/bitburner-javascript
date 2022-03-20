@@ -80,6 +80,9 @@ var hackMessages = [
 	"Incoming Message from Anonymous."
 ]
 
+var isLogging = true 
+var isFunny = true 
+
 var rootList = []
 var blockList = []
 
@@ -229,18 +232,18 @@ async function attack(ns) {
 		if (servSec > 0) { //servMinSec) {
 			await log(ns, file + ": " + me + ": " + tar + ": Security: Too High.")
 			await ns.weaken(tar)
-			await ns.toast(wm)
+			notify(ns, wm)
 			
 		}
 		if (servAvMoney < servMaxMoney * 0.05) {//* 0.75) {
 			await log(ns, file + ": " + me + ": " + tar + ": Money Too Low.")
 			await ns.grow(tar)
-			await ns.toast(gm)
+			notify(ns, gm)
 		}
 		if (servSec <= 0 && servAvMoeny >= servMaxMoney && hackLv >= servReqHackLv) {
 			await log(ns, file + ": " + me + ": " + tar + ": Hacking.")
 			await ns.hack(tar)
-			await ns.toast(hm)
+			notify(ns, hm)
 		}
 	}
 	await log(ns, file + ": " + me + ": Blocked List")
@@ -253,5 +256,9 @@ async function attack(ns) {
 }
 
 async function log(ns, msg) {
-	await ns.print(msg)
+	if(isLogging==true){ await ns.print(msg)}
+}
+
+async function notify(ns, msg){
+	if(isFunny==true) { ns.toast(msg)}
 }
