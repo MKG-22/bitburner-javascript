@@ -58,13 +58,26 @@ var weakMessages = [
 	"Don't forget leg day",
 	"Get back to the gym bro",
 	"They got beat by a girl xD",
-	"Get a period bro, maybe you be on my level"
+	"Get a period bro, maybe you be on my level",
+	"Pussy.."
 ]
 
 var growMessages = [
 	"Is there something in your pants, or are you just happy to see me?",
 	"Are you taller than me? AGAIN!?",
-	""
+	"Did you eat magic beans?!",
+	"DAYM isnt it cold up there?!?!!",
+	"You're always the first to know when its raining.",
+	"BONER!?"
+]
+
+var hackMessages = [
+	"Have you not been paying attention to your messages?",
+	"Do you like my hat? It's a nice color right? BLACK.",
+	"I thought i should ask if i could use your porn hub account, too late i've got it.",
+	"OMG is she fucking a horse!?",
+	"Here comes the hatchet.",
+	"Incoming Message from Anonymous."
 ]
 
 var rootList = []
@@ -206,19 +219,28 @@ async function gainRoot(ns, target) {
 }
 
 async function attack(ns) {
+	await ns.sleep(5000)
 	for (var i = 0; i < rootList.length; ++i) {
-		var tar = rootList[i]
+		var wm = Math.floor(Math.random() * weakMessages.length)
+		var gm = Math.floor(Math.random() * growMessages.length)
+		var hm = Math.floor(Math.random() * hackMessages.length)
+		var tar = rootList[i]	
+		
 		if (servSec > 0) { //servMinSec) {
 			await log(ns, file + ": " + me + ": " + tar + ": Security: Too High.")
 			await ns.weaken(tar)
+			await ns.toast(wm)
+			
 		}
-		if (servAvMoney < servMaxMoney * 0.75) {//* 0.75) {
+		if (servAvMoney < servMaxMoney * 0.05) {//* 0.75) {
 			await log(ns, file + ": " + me + ": " + tar + ": Money Too Low.")
 			await ns.grow(tar)
+			await ns.toast(gm)
 		}
 		if (servSec <= 0 && servAvMoeny >= servMaxMoney && hackLv >= servReqHackLv) {
 			await log(ns, file + ": " + me + ": " + tar + ": Hacking.")
 			await ns.hack(tar)
+			await ns.toast(hm)
 		}
 	}
 	await log(ns, file + ": " + me + ": Blocked List")
