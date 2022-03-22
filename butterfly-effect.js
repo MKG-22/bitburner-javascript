@@ -12,14 +12,14 @@
 // 	"omega-net",
 // 	"the-hub",
 // 	"zb-institute",
-// 	"syscore",
-// 	"CSEC",
-// 	"joesguns",
-// 	"hong-fang-tea",
-// 	"max-hardware",
-// 	"neo-net",
-// 	"johnson-ortho",
-// 	"summit-uni",
+// "syscore",
+// "CSEC",
+// "joesguns",
+// "hong-fang-tea",
+// "max-hardware",
+// "neo-net",
+// "johnson-ortho",
+// "summit-uni",
 // 	"avmnite-02h",
 // 	"rothman-uni",
 // 	"silver-helix",
@@ -80,8 +80,8 @@ var hackMessages = [
 	"Incoming Message from Anonymous."
 ]
 
-var isLogging = true 
-var isFunny = true 
+var isLogging = true
+var isFunny = true
 
 var rootList = []
 var blockList = []
@@ -222,9 +222,8 @@ async function gainRoot(ns, target) {
 }
 
 async function attack(ns) {
-	await ns.sleep(5000)
 	// for (var i = 0; i < rootList.length; ++i) {
-		for (var x of rootList){
+	for (var x of rootList) {
 		var wm = Math.floor(Math.random() * weakMessages.length)
 		var gm = Math.floor(Math.random() * growMessages.length)
 		var hm = Math.floor(Math.random() * hackMessages.length)
@@ -233,33 +232,32 @@ async function attack(ns) {
 		if (servSec > 0) { //servMinSec) {
 			await log(ns, file + ": " + me + ": " + x + ": Security: Too High.")
 			await ns.weaken(x)
-			notify(ns, wm)
-			
+			notify(ns, weakMessages[wm])
+
 		}
 		if (servAvMoney < servMaxMoney * 0.05) {//* 0.75) {
 			await log(ns, file + ": " + me + ": " + x + ": Money Too Low.")
 			await ns.grow(x)
-			notify(ns, gm)
+			notify(ns, growMessages[gm])
 		}
-		if (servSec <= 0 && servAvMoeny >= servMaxMoney && hackLv >= servReqHackLv) {
+		if (servSec <= servMinSec && servAvMoneny >= (servMaxMoney * 0.05) && hackLv >= servReqHackLv) {
 			await log(ns, file + ": " + me + ": " + x + ": Hacking.")
 			await ns.hack(x)
-			notify(ns, hm)
+			notify(ns, hackMessages[hm])
 		}
 	}
 	await log(ns, file + ": " + me + ": Blocked List")
 	await log(ns, file + ": " + me + ": " + blockList)
 	await log(ns, file + ": " + me + ": Root List")
 	await log(ns, file + ": " + me + ": " + rootList)
-	await ns.sleep(1000)
-	await log(ns, file + ": " + me + ": " + target + ": Re-Runnig Spread.")
+	await ns.sleep(600000)
 	await attack(ns)
 }
 
 async function log(ns, msg) {
-	if(isLogging==true){ await ns.print(msg)}
+	if (isLogging == true) { await ns.print(msg) }
 }
 
-async function notify(ns, msg){
-	if(isFunny==true) { await ns.toast(msg)}
+async function notify(ns, msg) {
+	if (isFunny == true) { await ns.toast(msg) }
 }
